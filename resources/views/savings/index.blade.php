@@ -1,38 +1,64 @@
 <x-app-layout>
     <x-slot name="header"><h2 class="font-semibold text-lg">Tabungan</h2></x-slot>
 
-    <div class="p-4 space-y-4">
-        <form class="flex gap-2" method="get" action="{{ route('savings.index') }}">
-            <select name="account_id" class="w-full border rounded p-2">
+    <div class="p-4 space-y-4 pb-16">
+        {{-- Filter akun (mobile-first, sama seperti Hutang) --}}
+        <form class="grid grid-cols-12 gap-2" method="get" action="{{ route('savings.index') }}">
+            <select name="account_id" class="col-span-9 sm:col-span-10 border rounded-lg p-2 h-10 w-full">
                 @foreach($accounts as $acc)
                     <option value="{{ $acc->id }}" @selected(optional($active)->id==$acc->id)>{{ $acc->name }}</option>
                 @endforeach
             </select>
-            <button class="px-3 py-2 bg-blue-600 text-white rounded">Pilih</button>
+            <button class="col-span-3 sm:col-span-2 px-3 h-10 bg-blue-600 text-white rounded-lg w-full">Pilih</button>
         </form>
 
-        <a href="{{ route('savings.create') }}" class="px-3 py-2 bg-blue-600 text-white rounded block text-center">+ Buat Tabungan</a>
+        <a href="{{ route('savings.create') }}" class="px-3 py-2 bg-blue-600 text-white rounded-lg block text-center">+ Buat Tabungan</a>
 
         @foreach($savings as $s)
-        <div class="bg-white rounded-xl shadow p-3 space-y-2">
-            <div class="flex justify-between">
-                <div>
-                    <div class="font-semibold">{{ $s->name }}</div>
+        <div class="bg-white rounded-2xl shadow p-4 space-y-3 overflow-hidden">
+            {{-- Header kartu (selaras dengan Hutang) --}}
+            <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                    <div class="font-semibold truncate">{{ $s->name }}</div>
                     <div class="text-xs text-gray-500">Target: Rp {{ number_format($s->target_amount,0,',','.') }}</div>
                 </div>
-                <div class="text-sm font-semibold">Terkumpul: Rp {{ number_format($s->current_amount,0,',','.') }}</div>
+                <div class="text-right text-sm shrink-0">
+                    <div class="font-semibold">Terkumpul: Rp {{ number_format($s->current_amount,0,',','.') }}</div>
+                </div>
             </div>
 
-            <form method="post" action="{{ route('savings.entries.store',$s) }}" class="flex gap-2">
+            {{-- Form setor/tarik (grid responsif, anti-overflow; pola sama dengan Hutang) --}}
+            <form method="post" action="{{ route('savings.entries.store',$s) }}"
+                  class="grid grid-cols-1 md:grid-cols-5 gap-2">
                 @csrf
-                <select name="type" class="border rounded p-2">
+
+                {{-- Jenis transaksi --}}
+                <select name="type"
+                        class="border rounded-lg p-2 h-10 w-full md:col-span-1"
+                        aria-label="Jenis transaksi">
                     <option value="deposit">Setor</option>
                     <option value="withdraw">Tarik</option>
                 </select>
-                <input name="amount" class="border rounded p-2 w-full" placeholder="Jumlah">
-                <input name="transacted_at" type="datetime-local" class="border rounded p-2" value="{{ now()->format('Y-m-d\TH:i') }}">
-                <input name="note" class="border rounded p-2 w-full" placeholder="Catatan">
-                <button class="px-3 py-2 bg-blue-600 text-white rounded">Tambah</button>
+
+                {{-- Jumlah --}}
+                <input name="amount" type="number" step="0.01" min="0"
+                       class="border rounded-lg p-2 h-10 w-full md:col-span-1"
+                       placeholder="Jumlah" aria-label="Jumlah">
+
+                {{-- Tanggal & jam --}}
+                <input name="transacted_at" type="datetime-local"
+                       class="border rounded-lg p-2 h-10 w-full md:col-span-2"
+                       value="{{ now()->format('Y-m-d\TH:i') }}" aria-label="Tanggal transaksi">
+
+                {{-- Catatan (baris kedua, lebar) --}}
+                <input name="note"
+                       class="border rounded-lg p-2 h-10 w-full md:col-span-4"
+                       placeholder="Catatan" aria-label="Catatan">
+
+                {{-- Tombol submit (penuh di mobile, sempit di md) --}}
+                <button class="px-3 h-10 bg-blue-600 text-white rounded-lg w-full md:col-span-1">
+                    Tambah
+                </button>
             </form>
         </div>
         @endforeach
