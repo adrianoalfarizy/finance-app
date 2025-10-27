@@ -37,7 +37,7 @@
                     </optgroup>
                 </select>
             </label>
-            <input name="amount" class="w-full border rounded p-2" placeholder="Jumlah (angka)">
+            <input name="amount" class="w-full border rounded p-2 js-currency" placeholder="Jumlah (angka)" type="text" inputmode="numeric" data-decimals="0">
             <input name="transacted_at" type="datetime-local" class="w-full border rounded p-2" value="{{ now()->format('Y-m-d\TH:i') }}">
             <input name="description" class="w-full border rounded p-2" placeholder="Keterangan (opsional)">
             <button class="px-3 py-2 bg-blue-600 text-white rounded w-full">Simpan</button>
@@ -63,7 +63,7 @@
                     @endforeach
                 </select>
             </label>
-            <input name="amount" class="w-full border rounded p-2" placeholder="Jumlah (angka)">
+            <input name="amount" class="w-full border rounded p-2 js-currency" placeholder="Jumlah (angka)" type="text" inputmode="numeric" data-decimals="0">
             <input name="transacted_at" type="datetime-local" class="w-full border rounded p-2" value="{{ now()->format('Y-m-d\TH:i') }}">
             <input name="description" class="w-full border rounded p-2" placeholder="Keterangan (opsional)">
             <button class="px-3 py-2 bg-blue-600 text-white rounded w-full">Simpan Transfer</button>

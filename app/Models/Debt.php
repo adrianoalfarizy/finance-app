@@ -7,24 +7,60 @@ use Illuminate\Database\Eloquent\Model;
 class Debt extends Model
 {
     protected $fillable = [
-        'account_id','creditor_name','principal_amount','interest_rate',
-        'start_date','due_date','status','note'
+        'account_id',
+        'creditor_name',
+        'principal_amount',
+        'interest_rate',
+        'start_date',
+        'due_date',
+        'note',
+        'status',
     ];
 
-    public function account() {
-        return $this->belongsTo(Account::class);
+    // Pastikan angka dibaca sebagai float (bukan string)
+    protected $casts = [
+        'principal_amount' => 'float',
+        'interest_rate'    => 'float',
+    ];
+
+    // Opsional: supaya muncul saat toArray()/JSON (tidak wajib untuk Blade)
+    protected $appends = [
+        'interest_amount',
+        'total_due',
+        'paid_amount',
+        'remaining_due',
+    ];
+
+    public function payments()
+    {
+        return $this->hasMany(\App\Models\DebtPayment::class);
     }
 
-    public function payments() {
-        return $this->hasMany(DebtPayment::class);
+    /** Bunga rupiah: persen flat dari pokok */
+    public function getInterestAmountAttribute(): float
+    {
+        $rate = (float) ($this->interest_rate ?? 0);
+        $principal = (float) ($this->principal_amount ?? 0);
+        return round($principal * $rate / 100, 2);
     }
 
-    public function getPaidAmountAttribute(): string {
-        return number_format($this->payments()->sum('amount'), 2, '.', '');
+    /** Total tagihan = pokok + bunga */
+    public function getTotalDueAttribute(): float
+    {
+        return round((float) ($this->principal_amount ?? 0) + $this->interest_amount, 2);
     }
 
-    public function getRemainingAttribute(): string {
-        $rem = (float)$this->principal_amount - (float)$this->payments()->sum('amount');
-        return number_format(max($rem, 0), 2, '.', '');
+    /** Total sudah dibayar (jumlah payments) */
+    public function getPaidAmountAttribute(): float
+    {
+        // Query langsung supaya akurat meski relasi belum di-load
+        return (float) $this->payments()->sum('amount');
+    }
+
+    /** Sisa = total_due - paid_amount, minimum 0 */
+    public function getRemainingDueAttribute(): float
+    {
+        $left = $this->total_due - $this->paid_amount;
+        return $left > 0 ? round($left, 2) : 0.0;
     }
 }

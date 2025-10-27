@@ -11,7 +11,7 @@
             </select>
         </label>
         <input name="name" class="w-full border rounded p-2" placeholder="Nama tabungan">
-        <input name="target_amount" class="w-full border rounded p-2" placeholder="Target (opsional)">
+        <input name="target_amount" class="w-full border rounded p-2 js-currency" placeholder="Target (opsional)" type="text" inputmode="numeric" data-decimals="0">
         <button class="px-3 py-2 bg-blue-600 text-white rounded">Simpan</button>
     </form>
 </x-app-layout>
