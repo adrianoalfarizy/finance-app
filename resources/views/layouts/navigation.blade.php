@@ -90,6 +90,18 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('accounts.index')" :active="request()->routeIs('accounts.*')">
+                Akun
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
+                Transaksi
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('savings.index')" :active="request()->routeIs('savings.*')">
+                Tabungan
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('debts.index')" :active="request()->routeIs('debts.*')">
+                Hutang
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
