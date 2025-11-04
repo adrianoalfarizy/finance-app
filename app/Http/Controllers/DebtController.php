@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Debt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class DebtController extends Controller
 {
@@ -54,13 +55,16 @@ class DebtController extends Controller
             'creditor_name' => 'required|string|max:120',
             'principal_amount' => 'required|numeric|min:0.01',
             'interest_rate' => 'nullable|numeric|min:0', // persen (flat) – misal 10 = 10%
-            'monthly_payment' => 'nullable|numeric|min:0',
+            'repayment_type' => ['required', Rule::in(['one_time', 'installment'])],
+            'monthly_payment' => ['nullable', 'numeric', 'min:0', Rule::requiredIf(fn () => $request->input('repayment_type') === 'installment')],
             'start_date' => 'nullable|date',
             'due_date' => 'nullable|date|after_or_equal:start_date',
             'note' => 'nullable|string'
         ]);
 
-        $data['monthly_payment'] = $data['monthly_payment'] ?? 0;
+        $data['monthly_payment'] = $data['repayment_type'] === 'installment'
+            ? ($data['monthly_payment'] ?? 0)
+            : 0;
 
         $acc = Account::findOrFail($data['account_id']);
         $this->authorize('update', $acc);

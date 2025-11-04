@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
                         Transaksi
                     </x-nav-link>
+                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                        Kategori
+                    </x-nav-link>
                     <x-nav-link :href="route('savings.index')" :active="request()->routeIs('savings.*')">
                         Tabungan
                     </x-nav-link>
@@ -98,6 +101,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
                 Transaksi
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                Kategori
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('savings.index')" :active="request()->routeIs('savings.*')">
                 Tabungan

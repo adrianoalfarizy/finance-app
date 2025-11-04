@@ -37,6 +37,42 @@
             </div>
         </div>
 
+        @php
+            $hasCategorySummary = !empty($stats['category_options']);
+        @endphp
+
+        @if($hasCategorySummary)
+        <div class="bg-white rounded-xl p-4 shadow space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <div>
+                    <div class="font-semibold">Ringkasan Kategori</div>
+                    @if($stats['category_summary_title'])
+                        <div class="text-xs text-gray-500">{{ $stats['category_summary_title'] }}</div>
+                    @endif
+                </div>
+                <form method="get" action="{{ route('dashboard') }}" class="flex gap-2">
+                    <input type="hidden" name="account_id" value="{{ $active->id }}">
+                    <select name="category_filter" class="border rounded p-2 text-sm">
+                        @foreach($stats['category_options'] as $value => $label)
+                            <option value="{{ $value }}" @selected($stats['category_filter'] === $value)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                    <button class="px-3 py-2 bg-gray-100 text-gray-700 rounded">Terapkan</button>
+                </form>
+            </div>
+            <ul class="space-y-1 text-sm">
+                @forelse($stats['category_summary'] as $row)
+                    <li class="flex justify-between">
+                        <span class="truncate">{{ $row['name'] }}</span>
+                        <span class="font-semibold {{ $row['type'] === 'income' ? 'text-green-600' : 'text-red-600' }}">Rp {{ number_format($row['total'],0,',','.') }}</span>
+                    </li>
+                @empty
+                    <li class="text-gray-400">Belum ada data untuk pilihan ini.</li>
+                @endforelse
+            </ul>
+        </div>
+        @endif
+
         <div class="bg-white rounded-xl p-4 shadow">
             <div class="font-semibold mb-2">Transaksi Terbaru</div>
             <ul class="divide-y">

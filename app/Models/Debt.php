@@ -12,6 +12,7 @@ class Debt extends Model
         'creditor_name',
         'principal_amount',
         'interest_rate',
+        'repayment_type',
         'monthly_payment',
         'start_date',
         'due_date',

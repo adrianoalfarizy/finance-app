@@ -35,7 +35,14 @@
                 <div class="flex items-start justify-between gap-3">
                     <div class="min-w-0">
                         <div class="font-semibold truncate">{{ $d->creditor_name }}</div>
-                        <div class="text-xs text-gray-500">Status: {{ strtoupper($d->status) }}</div>
+                        <div class="text-xs text-gray-500">
+                            Status: {{ strtoupper($d->status) }} •
+                            @if($d->repayment_type === 'installment')
+                                Angsuran
+                            @else
+                                Sekali bayar
+                            @endif
+                        </div>
                     </div>
                     <div class="text-right text-sm shrink-0">
                         <div>Pokok: Rp {{ number_format($d->principal_amount, 0, ',', '.') }}</div>

@@ -7,6 +7,7 @@ use App\Http\Controllers\{
     DashboardController,
     DebtController,
     DebtPaymentController,
+    CategoryController,
     BillingController,
     ProfileController,
     SavingController,
@@ -45,6 +46,9 @@ Route::middleware('auth')->group(function () {
     // Tagihan
     Route::get('bills', [BillingController::class, 'index'])->name('bills.index');
     Route::post('bills', [BillingController::class, 'store'])->name('bills.store');
+
+    // Kategori
+    Route::resource('categories', CategoryController::class)->except(['show']);
 });
 
 require __DIR__ . '/auth.php';

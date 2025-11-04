@@ -30,6 +30,7 @@ class BillingController extends Controller
 
         $debts = Debt::whereHas('account.users', fn($q) => $q->where('user_id', $user->id))
             ->where('status', '!=', 'paid')
+            ->where('repayment_type', 'installment')
             ->where('monthly_payment', '>', 0)
             ->with('account')
             ->withSum(['payments as paid_this_month' => function ($q) use ($start, $end) {
@@ -81,6 +82,7 @@ class BillingController extends Controller
             $debt = Debt::whereHas('account.users', fn($q) => $q->where('user_id', $user->id))
                 ->where('id', $debtId)
                 ->where('status', '!=', 'paid')
+                ->where('repayment_type', 'installment')
                 ->first();
 
             if (!$debt || $debt->monthly_payment <= 0 || $debt->remaining_due <= 0) {
