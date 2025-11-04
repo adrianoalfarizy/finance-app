@@ -32,9 +32,3 @@
         </form>
     </div>
 </x-app-layout>
-{{-- resources/views/accounts/index.blade.php --}}
-@if (session('success'))
-  <div class="m-4 bg-green-50 text-green-700 border border-green-200 rounded p-3 text-sm">
-    {{ session('success') }}
-  </div>
-@endif

@@ -26,6 +26,5 @@
                 {{ $slot }}
             </div>
         </div>
-        @include('partials.currency')
-</body>
-</html>
+    </body>
+    </html>

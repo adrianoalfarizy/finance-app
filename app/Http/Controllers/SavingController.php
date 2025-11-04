@@ -45,7 +45,7 @@ class SavingController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'amount' => $this->normalizeCurrency($request->input('amount')),
+            'target_amount' => $this->normalizeCurrency($request->input('target_amount')),
         ]);
         $data = $request->validate([
             'account_id' => 'required|exists:accounts,id',

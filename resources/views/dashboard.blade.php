@@ -54,7 +54,7 @@
 
     {{-- Bottom Nav (mobile) --}}
     <div class="fixed bottom-0 inset-x-0 bg-white border-t shadow-sm">
-        <div class="grid grid-cols-4 text-center text-xs">
+        <div class="grid grid-cols-5 text-center text-xs">
             <a href="{{ route('dashboard') }}" class="p-2 {{ request()->routeIs('dashboard') ? 'text-blue-600' : '' }}">Dashboard</a>
             <a href="{{ route('accounts.index') }}" class="p-2 {{ request()->routeIs('accounts.*') ? 'text-blue-600' : '' }}">Akun</a>
             <a href="{{ route('transactions.index') }}" class="p-2 {{ request()->routeIs('transactions.*') ? 'text-blue-600' : '' }}">Transaksi</a>

@@ -63,6 +63,5 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('input.js-currency, input[name*="amount"], input[name*="_amount"]').forEach(attach);
-    console.log('Rupiah formatter ready');
   });
 })();
