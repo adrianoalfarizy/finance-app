@@ -13,12 +13,12 @@
 
         <a href="{{ route('transactions.create') }}" class="px-3 py-2 bg-blue-600 text-white rounded block text-center">+ Tambah</a>
 
-        <div class="bg-white rounded-xl shadow divide-y">
+        <div class="glass-panel-light rounded-xl shadow divide-y divide-white/10 text-white">
             @forelse($transactions as $t)
                 <div class="p-3 flex justify-between items-center">
                     <div>
-                        <div class="text-sm">{{ $t->description ?? '-' }}</div>
-                        <div class="text-xs text-gray-500">{{ $t->transacted_at->format('d M Y H:i') }}</div>
+                        <div class="text-sm text-white">{{ $t->description ?? '-' }}</div>
+                        <div class="text-xs text-white/60">{{ $t->transacted_at->format('d M Y H:i') }}</div>
                     </div>
                     <div class="text-right">
                         <div class="text-sm font-semibold {{ $t->type==='income'?'text-green-600':'text-red-600' }}">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
             @empty
-                <div class="p-3 text-sm text-gray-500">Belum ada transaksi.</div>
+                <div class="p-3 text-sm text-white/70">Belum ada transaksi.</div>
             @endforelse
         </div>
 

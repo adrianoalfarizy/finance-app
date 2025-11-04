@@ -2,24 +2,24 @@
     <x-slot name="header"><h2 class="font-semibold text-lg">Bagikan Akses: {{ $account->name }}</h2></x-slot>
 
     <div class="p-4 space-y-4">
-        <form method="post" action="{{ route('accounts.share.update',$account) }}" class="bg-white rounded-xl p-3 shadow space-y-2">
+        <form method="post" action="{{ route('accounts.share.update',$account) }}" class="glass-panel-light rounded-xl p-3 shadow space-y-2 text-white">
             @csrf
-            <input type="email" name="email" class="w-full border rounded p-2" placeholder="Email user">
-            <select name="role" class="w-full border rounded p-2">
+            <input type="email" name="email" class="w-full border border-white/20 rounded p-2 bg-white/5 text-white placeholder-white/60" placeholder="Email user">
+            <select name="role" class="w-full border border-white/20 rounded p-2 bg-white/5 text-white">
                 <option value="editor">Editor (lihat & ubah)</option>
                 <option value="viewer">Viewer (lihat saja)</option>
             </select>
             <button class="px-3 py-2 bg-blue-600 text-white rounded">Berikan Akses</button>
         </form>
 
-        <div class="bg-white rounded-xl shadow">
+        <div class="glass-panel-light rounded-xl shadow text-white">
             <div class="p-3 font-semibold">Sudah Dibagikan</div>
             <ul class="divide-y">
                 @foreach($shared as $u)
                     <li class="p-3 flex justify-between items-center">
                         <div>
-                            <div class="text-sm">{{ $u->name }} <span class="text-xs text-gray-500">({{ $u->email }})</span></div>
-                            <div class="text-xs text-gray-500">Role: {{ strtoupper($u->pivot->role) }}</div>
+                            <div class="text-sm">{{ $u->name }} <span class="text-xs text-white/60">({{ $u->email }})</span></div>
+                            <div class="text-xs text-white/60">Role: {{ strtoupper($u->pivot->role) }}</div>
                         </div>
                         <form method="post" action="{{ route('accounts.share.revoke', [$account, $u]) }}" onsubmit="return confirm('Cabut akses?');">
                             @csrf @method('DELETE')

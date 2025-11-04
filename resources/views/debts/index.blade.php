@@ -18,7 +18,7 @@
 
         {{-- Tampilkan CTA jika belum ada akun debt --}}
         @if($accounts->isEmpty())
-            <div class="text-sm text-gray-600">
+            <div class="text-sm text-white/80">
                 Anda belum memiliki akun bertipe <strong>Hutang</strong>.
                 <a href="{{ route('accounts.create', ['type' => 'debt']) }}" class="text-blue-600 underline">+ Buat Akun
                     Hutang</a>
@@ -29,19 +29,19 @@
         <a href="{{ route('debts.create') }}" class="px-3 py-2 bg-blue-600 text-white rounded-lg block text-center">+
             Catat Hutang</a>
 
-        <a href="{{ route('debts.history', ['account_id' => optional($active)->id]) }}" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg block text-center border text-sm">Lihat hutang yang sudah lunas &rarr;</a>
+        <a href="{{ route('debts.history', ['account_id' => optional($active)->id]) }}" class="px-3 py-2 bg-white/15 text-white rounded-lg block text-center border border-white/20 text-sm">Lihat hutang yang sudah lunas &rarr;</a>
 
         @if($debts->isEmpty())
-            <div class="bg-white rounded-xl shadow p-4 text-sm text-gray-500">Tidak ada hutang berjalan.</div>
+            <div class="glass-panel-light rounded-xl shadow p-4 text-sm text-white/70">Tidak ada hutang berjalan.</div>
         @endif
 
         @foreach($debts as $d)
-            <div class="bg-white rounded-2xl shadow p-4 space-y-3 overflow-hidden">
+            <div class="glass-panel-light rounded-2xl shadow p-4 space-y-3 overflow-hidden text-white">
                 {{-- Header kartu --}}
                 <div class="flex items-start justify-between gap-3">
                     <div class="min-w-0">
                         <div class="font-semibold truncate">{{ $d->creditor_name }}</div>
-                        <div class="text-xs text-gray-500">
+                        <div class="text-xs text-white/60">
                             Status: {{ strtoupper($d->status) }} •
                             @if($d->repayment_type === 'installment')
                                 Angsuran
@@ -50,11 +50,11 @@
                             @endif
                         </div>
                     </div>
-                    <div class="text-right text-sm shrink-0">
+                    <div class="text-right text-sm shrink-0 space-y-1">
                         <div>Pokok: Rp {{ number_format($d->principal_amount, 0, ',', '.') }}</div>
                         <div>Bunga ({{ rtrim(rtrim(number_format($d->interest_rate ?? 0, 2, ',', '.'), '0'), ',') }}%):
                             Rp {{ number_format($d->interest_amount, 0, ',', '.') }}</div>
-                        <div>Total: <span class="font-semibold">Rp {{ number_format($d->total_due, 0, ',', '.') }}</span></div>
+                        <div>Total: <span class="font-semibold text-blue-200">Rp {{ number_format($d->total_due, 0, ',', '.') }}</span></div>
                         @if($d->monthly_payment > 0)
                             <div>Angsuran bulanan: Rp {{ number_format($d->monthly_payment, 0, ',', '.') }}</div>
                         @endif

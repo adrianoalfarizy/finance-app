@@ -15,30 +15,30 @@
                 </select>
                 <button class="col-span-3 px-3 h-10 bg-blue-600 text-white rounded-lg">Pilih</button>
             </form>
-            <a href="{{ route('debts.index', ['account_id' => optional($active)->id]) }}" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg border text-sm">&larr; Kembali ke hutang berjalan</a>
+            <a href="{{ route('debts.index', ['account_id' => optional($active)->id]) }}" class="px-3 py-2 bg-white/15 text-white rounded-lg border border-white/20 text-sm">&larr; Kembali ke hutang berjalan</a>
         </div>
 
         @forelse($debts as $d)
-            <div class="bg-white rounded-2xl shadow p-4 space-y-3">
+            <div class="glass-panel-light rounded-2xl shadow p-4 space-y-3 text-white">
                 <div class="flex items-start justify-between gap-3">
                     <div class="min-w-0">
                         <div class="font-semibold truncate">{{ $d->creditor_name }}</div>
-                        <div class="text-xs text-green-600">Lunas • {{ optional($d->payments->sortByDesc('transacted_at')->first())->transacted_at?->format('d M Y') }}</div>
+                        <div class="text-xs text-green-300">Lunas • {{ optional($d->payments->sortByDesc('transacted_at')->first())->transacted_at?->format('d M Y') }}</div>
                     </div>
-                    <div class="text-right text-sm shrink-0">
+                    <div class="text-right text-sm shrink-0 space-y-1">
                         <div>Pokok: Rp {{ number_format($d->principal_amount, 0, ',', '.') }}</div>
                         <div>Bunga: Rp {{ number_format($d->interest_amount, 0, ',', '.') }}</div>
                         <div>Total dibayar: <span class="font-semibold">Rp {{ number_format($d->paid_amount, 0, ',', '.') }}</span></div>
                     </div>
                 </div>
 
-                <div class="text-sm text-gray-600">
+                <div class="text-sm text-white/70">
                     <div>Mulai: {{ $d->start_date ? \Illuminate\Support\Carbon::parse($d->start_date)->translatedFormat('d M Y') : '-' }}</div>
                     <div>Jatuh tempo: {{ $d->due_date ? \Illuminate\Support\Carbon::parse($d->due_date)->translatedFormat('d M Y') : '-' }}</div>
                 </div>
             </div>
         @empty
-            <div class="bg-white rounded-xl shadow p-4 text-sm text-gray-500">Belum ada hutang yang ditandai lunas.</div>
+            <div class="glass-panel-light rounded-xl shadow p-4 text-sm text-white/70">Belum ada hutang yang ditandai lunas.</div>
         @endforelse
 
         @php

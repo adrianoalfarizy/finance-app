@@ -6,7 +6,7 @@
     <div class="p-4 space-y-4 pb-16">
         {{-- Filter akun (mobile-first, sama seperti Hutang) --}}
         <form class="grid grid-cols-12 gap-2" method="get" action="{{ route('savings.index') }}">
-            <select name="account_id" class="col-span-9 sm:col-span-10 border rounded-lg p-2 h-10 w-full">
+            <select name="account_id" class="col-span-9 sm:col-span-10 border border-white/20 rounded-lg p-2 h-10 w-full bg-white/10 text-white">
                 @foreach($accounts as $acc)
                     <option value="{{ $acc->id }}" @selected(optional($active)->id == $acc->id)>{{ $acc->name }}</option>
                 @endforeach
@@ -18,15 +18,15 @@
             Buat Tabungan</a>
 
         @foreach($savings as $s)
-            <div class="bg-white rounded-2xl shadow p-4 space-y-3 overflow-hidden">
+            <div class="glass-panel-light rounded-2xl shadow p-4 space-y-3 overflow-hidden text-white">
                 {{-- Header kartu (selaras dengan Hutang) --}}
                 <div class="flex items-start justify-between gap-3">
                     <div class="min-w-0">
                         <div class="font-semibold truncate">{{ $s->name }}</div>
-                        <div class="text-xs text-gray-500">Target: Rp {{ number_format($s->target_amount, 0, ',', '.') }}</div>
+                        <div class="text-xs text-white/60">Target: Rp {{ number_format($s->target_amount, 0, ',', '.') }}</div>
                     </div>
                     <div class="text-right text-sm shrink-0">
-                        <div class="font-semibold">Terkumpul: Rp {{ number_format($s->current_amount, 0, ',', '.') }}</div>
+                        <div class="font-semibold text-blue-200">Terkumpul: Rp {{ number_format($s->current_amount, 0, ',', '.') }}</div>
                     </div>
                 </div>
 
@@ -36,14 +36,14 @@
                     @csrf
 
                     {{-- Jenis transaksi --}}
-                    <select name="type" class="border rounded-lg p-2 h-10 w-full md:col-span-1"
+                    <select name="type" class="border border-white/20 rounded-lg p-2 h-10 w-full md:col-span-1 bg-white/5 text-white"
                         aria-label="Jenis transaksi">
                         <option value="deposit">Setor</option>
                         <option value="withdraw">Tarik</option>
                     </select>
 
                     {{-- Akun sumber/tujuan uang --}}
-                    <select name="transfer_account_id" class="border rounded-lg p-2 h-10 w-full md:col-span-2"
+                    <select name="transfer_account_id" class="border border-white/20 rounded-lg p-2 h-10 w-full md:col-span-2 bg-white/5 text-white"
                         aria-label="Akun sumber/tujuan">
                         @foreach($spendableAccounts as $acc)
                             <option value="{{ $acc->id }}">{{ $acc->name }}</option>
@@ -52,15 +52,15 @@
 
                     {{-- Jumlah --}}
                     <input name="amount" type="text" inputmode="numeric" step="0.01" min="0"
-                        class="border rounded-lg p-2 h-10 w-full md:col-span-1 js-currency" placeholder="Jumlah" aria-label="Jumlah" data-decimals="0">
+                        class="border border-white/20 rounded-lg p-2 h-10 w-full md:col-span-1 bg-white/5 text-white js-currency" placeholder="Jumlah" aria-label="Jumlah" data-decimals="0">
 
                     {{-- Tanggal & jam --}}
                     <input name="transacted_at" type="datetime-local"
-                        class="border rounded-lg p-2 h-10 w-full md:col-span-1" value="{{ now()->format('Y-m-d\TH:i') }}"
+                        class="border border-white/20 rounded-lg p-2 h-10 w-full md:col-span-1 bg-white/5 text-white" value="{{ now()->format('Y-m-d\TH:i') }}"
                         aria-label="Tanggal transaksi">
 
                     {{-- Catatan (baris kedua penuh) --}}
-                    <input name="note" class="border rounded-lg p-2 h-10 w-full md:col-span-4" placeholder="Catatan"
+                    <input name="note" class="border border-white/20 rounded-lg p-2 h-10 w-full md:col-span-4 bg-white/5 text-white placeholder-white/60" placeholder="Catatan"
                         aria-label="Catatan">
 
                     {{-- Tombol submit --}}

@@ -3,8 +3,8 @@
         <h2 class="font-semibold text-lg">Tagihan Bulanan</h2>
     </x-slot>
 
-    <div class="p-4 space-y-4 pb-16">
-        <div class="text-sm text-gray-600">
+    <div class="p-4 space-y-4 pb-16 text-white">
+        <div class="text-sm text-white/80">
             Tagihan hutang yang jatuh tempo bulan {{ $monthLabel }}. Pilih tagihan yang sudah dibayar, lalu simpan.
         </div>
 
@@ -25,13 +25,13 @@
         @endif
 
         @if ($debts->isEmpty())
-            <div class="bg-white rounded-xl shadow p-4 text-sm text-gray-500">
+            <div class="glass-panel-light rounded-xl shadow p-4 text-sm text-white/80">
                 Tidak ada tagihan hutang yang perlu dibayar bulan ini.
             </div>
         @else
             <form method="post" action="{{ route('bills.store') }}" class="space-y-3">
                 @csrf
-                <div class="bg-white rounded-2xl shadow divide-y">
+                <div class="glass-panel-light rounded-2xl shadow divide-y divide-white/10 text-white">
                     @foreach ($debts as $debt)
                         <div class="p-4 space-y-3">
                             <div class="flex items-start gap-3">
@@ -42,7 +42,7 @@
                                     <div class="flex justify-between gap-3">
                                         <div>
                                             <div class="font-semibold truncate">{{ $debt->creditor_name }}</div>
-                                            <div class="text-xs text-gray-500">Akun: {{ $debt->account->name }}</div>
+                                            <div class="text-xs text-white/60">Akun: {{ $debt->account->name }}</div>
                                         </div>
                                         <div class="text-right text-sm shrink-0">
                                             <div>Tagihan: <span class="font-semibold">Rp {{ number_format($debt->due_amount, 0, ',', '.') }}</span></div>
@@ -52,18 +52,18 @@
                                         </div>
                                     </div>
                                     @if ($debt->due_date)
-                                        <div class="text-xs text-gray-500 mt-1">Jatuh tempo: {{ \Illuminate\Support\Carbon::parse($debt->due_date)->translatedFormat('d F Y') }}</div>
+                                        <div class="text-xs text-white/60 mt-1">Jatuh tempo: {{ \Illuminate\Support\Carbon::parse($debt->due_date)->translatedFormat('d F Y') }}</div>
                                     @endif
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:pl-7">
-                                <select name="debts[{{ $debt->id }}][pay_account_id]" class="border rounded-lg p-2 h-10 w-full">
+                                <select name="debts[{{ $debt->id }}][pay_account_id]" class="border border-white/20 rounded-lg p-2 h-10 w-full bg-white/5 text-white">
                                     <option value="">Pilih sumber dana</option>
                                     @foreach ($payAccounts as $account)
                                         <option value="{{ $account->id }}">{{ $account->name }}</option>
                                     @endforeach
                                 </select>
-                                <input type="text" value="Rp {{ number_format($debt->still_due_this_month, 0, ',', '.') }}" class="border rounded-lg p-2 h-10 bg-gray-100 text-gray-600" disabled>
+                                <input type="text" value="Rp {{ number_format($debt->still_due_this_month, 0, ',', '.') }}" class="border rounded-lg p-2 h-10 bg-white/10 text-white" disabled>
                                 <div class="hidden md:block"></div>
                             </div>
                         </div>
