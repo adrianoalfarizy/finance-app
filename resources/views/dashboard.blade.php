@@ -91,6 +91,17 @@
                 @endforelse
             </ul>
         </div>
+
+        @php
+            $summaryItems = [
+                ['label' => 'Total pemasukan', 'value' => 'Rp ' . number_format($stats['income'], 0, ',', '.'), 'accent' => 'text-green-600'],
+                ['label' => 'Total pengeluaran', 'value' => 'Rp ' . number_format($stats['expense'], 0, ',', '.'), 'accent' => 'text-red-600'],
+                ['label' => 'Total tabungan', 'value' => 'Rp ' . number_format($stats['savings_total'], 0, ',', '.'), 'accent' => 'text-blue-600'],
+                ['label' => 'Sisa hutang', 'value' => 'Rp ' . number_format($stats['debts_total'], 0, ',', '.'), 'accent' => 'text-amber-600'],
+            ];
+        @endphp
+        <div class="summary-footer-placeholder h-40 sm:h-32"></div>
+        @include('partials.summary-footer', ['items' => $summaryItems])
         @else
         <div class="text-sm text-gray-500">Anda belum memiliki akses ke akun manapun.</div>
         @endif

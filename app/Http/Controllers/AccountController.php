@@ -13,7 +13,9 @@ class AccountController extends Controller
         $accounts = Account::whereHas('users', fn($q) => $q->where('user_id', Auth::id()))
             ->orderBy('name')->get();
 
-        return view('accounts.index', compact('accounts'));
+        $totalBalance = $accounts->sum(fn($account) => $account->balance);
+
+        return view('accounts.index', compact('accounts', 'totalBalance'));
     }
 
     public function create()

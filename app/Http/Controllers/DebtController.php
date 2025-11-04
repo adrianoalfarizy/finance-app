@@ -19,14 +19,37 @@ class DebtController extends Controller
         $accountId = $request->get('account_id', optional($accounts->first())->id);
         $active = $accountId ? $accounts->firstWhere('id', $accountId) : null;
 
-        $debts = $active ? $active->debts()->with('payments')->latest()->get() : collect();
+        $debts = $active ? $active->debts()->where('status', '!=', 'paid')->with('payments')->latest()->get() : collect();
+        $summary = [
+            'count' => $debts->count(),
+            'remaining' => $debts->sum(fn($debt) => $debt->remaining_due),
+            'monthly' => $debts->where('repayment_type', 'installment')->sum(fn($debt) => $debt->monthly_payment),
+        ];
 
         // Akun untuk membayar hutang: NON-debt → saldo akan berkurang
         $spendableAccounts = \App\Models\Account::whereHas('users', fn($q) => $q->where('user_id', \Auth::id()))
             ->whereIn('type', ['cash', 'bank', 'ewallet', 'saving']) // <— TIDAK termasuk 'debt'
             ->orderBy('name')->get();
 
-        return view('debts.index', compact('accounts', 'active', 'debts', 'spendableAccounts'));
+        return view('debts.index', compact('accounts', 'active', 'debts', 'spendableAccounts', 'summary'));
+    }
+
+    public function history(Request $request)
+    {
+        $accounts = \App\Models\Account::whereHas('users', fn($q) => $q->where('user_id', \Auth::id()))
+            ->where('type', 'debt')->orderBy('name')->get();
+
+        $accountId = $request->get('account_id', optional($accounts->first())->id);
+        $active = $accountId ? $accounts->firstWhere('id', $accountId) : null;
+
+        $debts = $active ? $active->debts()->where('status', 'paid')->with('payments')->latest()->get() : collect();
+
+        $summary = [
+            'count' => $debts->count(),
+            'total_paid' => $debts->sum(fn($debt) => $debt->paid_amount),
+        ];
+
+        return view('debts.history', compact('accounts', 'active', 'debts', 'summary'));
     }
 
 

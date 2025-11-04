@@ -20,8 +20,12 @@ class SavingController extends Controller
         $active = $accountId ? $accounts->firstWhere('id', $accountId) : null;
 
         $savings = collect();
+        $totalCurrent = 0.0;
+        $totalTarget = 0.0;
         if ($active) {
             $savings = $active->savings()->with('entries')->orderBy('name')->get();
+            $totalCurrent = $savings->sum(fn($saving) => (float) $saving->current_amount);
+            $totalTarget = $savings->sum(fn($saving) => (float) $saving->target_amount);
         }
 
         // Akun sumber/tujuan uang (untuk setor/tarik): cash/bank/ewallet/saving
@@ -29,7 +33,7 @@ class SavingController extends Controller
             ->whereIn('type', ['cash', 'bank', 'ewallet', 'saving'])
             ->orderBy('name')->get();
 
-        return view('savings.index', compact('accounts', 'active', 'savings', 'spendableAccounts'));
+        return view('savings.index', compact('accounts', 'active', 'savings', 'spendableAccounts', 'totalCurrent', 'totalTarget'));
     }
 
 

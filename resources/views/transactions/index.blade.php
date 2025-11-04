@@ -36,5 +36,15 @@
         </div>
 
         <div>{{ $transactions->links() }}</div>
+
+        @php
+            $summaryItems = [
+                ['label' => 'Total pemasukan', 'value' => 'Rp ' . number_format($summary['income'], 0, ',', '.'), 'accent' => 'text-green-600'],
+                ['label' => 'Total pengeluaran', 'value' => 'Rp ' . number_format($summary['expense'], 0, ',', '.'), 'accent' => 'text-red-600'],
+                ['label' => 'Selisih', 'value' => 'Rp ' . number_format($summary['balance'], 0, ',', '.'), 'accent' => ''],
+            ];
+        @endphp
+        <div class="summary-footer-placeholder h-40 sm:h-32"></div>
+        @include('partials.summary-footer', ['items' => $summaryItems])
     </div>
 </x-app-layout>

@@ -72,5 +72,13 @@
                 <button class="px-3 py-2 bg-blue-600 text-white rounded-lg w-full md:w-auto">Simpan Pembayaran</button>
             </form>
         @endif
+
+        @php
+            $summaryItems = [
+                ['label' => 'Total tagihan bulan ini', 'value' => 'Rp ' . number_format($totalDue, 0, ',', '.'), 'accent' => 'text-red-600'],
+            ];
+        @endphp
+        <div class="summary-footer-placeholder h-36 sm:h-28"></div>
+        @include('partials.summary-footer', ['items' => $summaryItems])
     </div>
 </x-app-layout>

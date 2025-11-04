@@ -71,5 +71,14 @@
 
             </div>
         @endforeach
+
+        @php
+            $summaryItems = [
+                ['label' => 'Total target', 'value' => 'Rp ' . number_format($totalTarget, 0, ',', '.'), 'accent' => ''],
+                ['label' => 'Total terkumpul', 'value' => 'Rp ' . number_format($totalCurrent, 0, ',', '.'), 'accent' => 'text-blue-600'],
+            ];
+        @endphp
+        <div class="summary-footer-placeholder h-36 sm:h-28"></div>
+        @include('partials.summary-footer', ['items' => $summaryItems])
     </div>
 </x-app-layout>

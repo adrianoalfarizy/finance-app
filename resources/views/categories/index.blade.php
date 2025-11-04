@@ -29,5 +29,12 @@
                 <div class="p-3 text-sm text-gray-500">Belum ada kategori.</div>
             @endforelse
         </div>
+        @php
+            $summaryItems = [
+                ['label' => 'Total kategori', 'value' => (string) $categories->count(), 'accent' => ''],
+            ];
+        @endphp
+        <div class="summary-footer-placeholder h-36 sm:h-28"></div>
+        @include('partials.summary-footer', ['items' => $summaryItems])
     </div>
 </x-app-layout>

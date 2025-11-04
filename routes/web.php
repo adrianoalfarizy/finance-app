@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     // Hutang
     Route::resource('debts', DebtController::class)->only(['index', 'create', 'store']);
     Route::post('debts/{debt}/payments', [DebtPaymentController::class, 'store'])->name('debts.payments.store');
+    Route::get('debts/history', [DebtController::class, 'history'])->name('debts.history');
 
     // Tagihan
     Route::get('bills', [BillingController::class, 'index'])->name('bills.index');

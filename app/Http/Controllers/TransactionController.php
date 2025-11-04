@@ -26,6 +26,9 @@ class TransactionController extends Controller
             ->latest('transacted_at')
             ->paginate(20)
             ->withQueryString(); // <- ini Paginator (bukan Collection)
+
+        $incomeTotal = (float) $active->transactions()->where('type', 'income')->sum('amount');
+        $expenseTotal = (float) $active->transactions()->where('type', 'expense')->sum('amount');
     } else {
         // buat paginator kosong agar view selalu bisa memanggil ->links()
         $transactions = new LengthAwarePaginator(
@@ -35,9 +38,17 @@ class TransactionController extends Controller
             Paginator::resolveCurrentPage(),
             ['path' => request()->url(), 'query' => request()->query()]
         );
+
+        $incomeTotal = $expenseTotal = 0.0;
     }
 
-    return view('transactions.index', compact('accounts','active','transactions'));
+    $summary = [
+        'income' => $incomeTotal,
+        'expense' => $expenseTotal,
+        'balance' => $incomeTotal - $expenseTotal,
+    ];
+
+    return view('transactions.index', compact('accounts','active','transactions', 'summary'));
 }
 
     public function create()

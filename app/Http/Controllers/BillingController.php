@@ -30,8 +30,6 @@ class BillingController extends Controller
 
         $debts = Debt::whereHas('account.users', fn($q) => $q->where('user_id', $user->id))
             ->where('status', '!=', 'paid')
-            ->where('repayment_type', 'installment')
-            ->where('monthly_payment', '>', 0)
             ->with('account')
             ->withSum(['payments as paid_this_month' => function ($q) use ($start, $end) {
                 $q->whereBetween('transacted_at', [$start, $end]);
@@ -39,20 +37,33 @@ class BillingController extends Controller
             ->get()
             ->filter(fn($debt) => $debt->remaining_due > 0)
             ->map(function ($debt) {
-                $target = $debt->monthly_payment > 0 ? $debt->monthly_payment : $debt->remaining_due;
-                $paid = (float) ($debt->paid_this_month ?? 0);
-                $debt->due_amount = min($target, $debt->remaining_due);
-                $debt->paid_this_month_amount = $paid;
-                $debt->still_due_this_month = max($debt->due_amount - $paid, 0);
+                $paidThisMonth = (float) ($debt->paid_this_month ?? 0);
+
+                if ($debt->repayment_type === 'installment') {
+                    $target = $debt->monthly_payment > 0 ? $debt->monthly_payment : $debt->remaining_due;
+                    $dueAmount = min($target, $debt->remaining_due);
+                    $stillDue = max($dueAmount - $paidThisMonth, 0);
+                } else {
+                    $dueAmount = min((float) $debt->principal_amount, $debt->remaining_due);
+                    $stillDue = max(min($dueAmount, $debt->remaining_due) - $paidThisMonth, 0);
+                }
+
+                $debt->due_amount = $dueAmount;
+                $debt->paid_this_month_amount = $paidThisMonth;
+                $debt->still_due_this_month = $stillDue;
+
                 return $debt;
             })
             ->filter(fn($debt) => $debt->still_due_this_month > 0)
             ->values();
 
+        $totalDue = $debts->sum(fn($debt) => $debt->still_due_this_month);
+
         return view('bills.index', [
             'debts' => $debts,
             'payAccounts' => $payAccounts,
             'monthLabel' => $start->translatedFormat('F Y'),
+            'totalDue' => $totalDue,
         ]);
     }
 
@@ -82,10 +93,9 @@ class BillingController extends Controller
             $debt = Debt::whereHas('account.users', fn($q) => $q->where('user_id', $user->id))
                 ->where('id', $debtId)
                 ->where('status', '!=', 'paid')
-                ->where('repayment_type', 'installment')
                 ->first();
 
-            if (!$debt || $debt->monthly_payment <= 0 || $debt->remaining_due <= 0) {
+            if (!$debt || $debt->remaining_due <= 0) {
                 continue;
             }
 
@@ -98,15 +108,25 @@ class BillingController extends Controller
 
             $this->authorize('update', $payAccount);
 
-            $paidThisMonth = $debt->payments()
-                ->whereBetween('transacted_at', [$start, $end])
-                ->sum('amount');
+            if ($debt->repayment_type === 'installment') {
+                $paidThisMonth = $debt->payments()
+                    ->whereBetween('transacted_at', [$start, $end])
+                    ->sum('amount');
 
-            $target = $debt->monthly_payment > 0 ? $debt->monthly_payment : $debt->remaining_due;
-            $amount = min(max($target - $paidThisMonth, 0), $debt->remaining_due);
+                $target = $debt->monthly_payment > 0 ? $debt->monthly_payment : $debt->remaining_due;
+                $amount = min(max($target - $paidThisMonth, 0), $debt->remaining_due);
 
-            if ($amount <= 0) {
-                continue;
+                if ($amount <= 0) {
+                    continue;
+                }
+            } else {
+                $totalPaid = $debt->payments()->sum('amount');
+                $remainingPrincipal = max((float) $debt->principal_amount - (float) $totalPaid, 0.0);
+                $amount = min($debt->remaining_due, $remainingPrincipal ?: $debt->remaining_due);
+
+                if ($amount <= 0) {
+                    continue;
+                }
             }
 
             try {

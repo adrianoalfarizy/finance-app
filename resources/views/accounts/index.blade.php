@@ -27,5 +27,12 @@
                 <div class="p-3 text-sm text-gray-500">Belum ada akun.</div>
             @endforelse
         </div>
+        @php
+            $summaryItems = [
+                ['label' => 'Total saldo seluruh akun', 'value' => 'Rp ' . number_format($totalBalance, 0, ',', '.'), 'accent' => ''],
+            ];
+        @endphp
+        <div class="summary-footer-placeholder h-36 sm:h-28"></div>
+        @include('partials.summary-footer', ['items' => $summaryItems])
     </div>
 </x-app-layout>

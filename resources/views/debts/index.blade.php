@@ -29,6 +29,12 @@
         <a href="{{ route('debts.create') }}" class="px-3 py-2 bg-blue-600 text-white rounded-lg block text-center">+
             Catat Hutang</a>
 
+        <a href="{{ route('debts.history', ['account_id' => optional($active)->id]) }}" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg block text-center border text-sm">Lihat hutang yang sudah lunas &rarr;</a>
+
+        @if($debts->isEmpty())
+            <div class="bg-white rounded-xl shadow p-4 text-sm text-gray-500">Tidak ada hutang berjalan.</div>
+        @endif
+
         @foreach($debts as $d)
             <div class="bg-white rounded-2xl shadow p-4 space-y-3 overflow-hidden">
                 {{-- Header kartu --}}
@@ -95,5 +101,15 @@
                 </form>
             </div>
         @endforeach
+
+        @php
+            $summaryItems = [
+                ['label' => 'Total hutang tercatat', 'value' => (string) $summary['count'], 'accent' => ''],
+                ['label' => 'Total angsuran bulanan', 'value' => 'Rp ' . number_format($summary['monthly'], 0, ',', '.'), 'accent' => ''],
+                ['label' => 'Total sisa hutang', 'value' => 'Rp ' . number_format($summary['remaining'], 0, ',', '.'), 'accent' => 'text-amber-600'],
+            ];
+        @endphp
+        <div class="summary-footer-placeholder h-40 sm:h-32"></div>
+        @include('partials.summary-footer', ['items' => $summaryItems])
     </div>
 </x-app-layout>
