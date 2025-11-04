@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('savings.index')" :active="request()->routeIs('savings.*')">
                         Tabungan
                     </x-nav-link>
+                    <x-nav-link :href="route('bills.index')" :active="request()->routeIs('bills.*')">
+                        Tagihan
+                    </x-nav-link>
                     <x-nav-link :href="route('debts.index')" :active="request()->routeIs('debts.*')">
                         Hutang
                     </x-nav-link>
@@ -98,6 +101,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('savings.index')" :active="request()->routeIs('savings.*')">
                 Tabungan
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('bills.index')" :active="request()->routeIs('bills.*')">
+                Tagihan
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('debts.index')" :active="request()->routeIs('debts.*')">
                 Hutang

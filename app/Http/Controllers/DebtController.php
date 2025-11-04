@@ -46,6 +46,7 @@ class DebtController extends Controller
         $request->merge([
             'principal_amount' => $this->normalizeCurrency($request->input('principal_amount')),
             'interest_rate' => $this->normalizeCurrency($request->input('interest_rate')), // jika user ketik "10" atau "10,5"
+            'monthly_payment' => $this->normalizeCurrency($request->input('monthly_payment')),
         ]);
 
         $data = $request->validate([
@@ -53,10 +54,13 @@ class DebtController extends Controller
             'creditor_name' => 'required|string|max:120',
             'principal_amount' => 'required|numeric|min:0.01',
             'interest_rate' => 'nullable|numeric|min:0', // persen (flat) – misal 10 = 10%
+            'monthly_payment' => 'nullable|numeric|min:0',
             'start_date' => 'nullable|date',
             'due_date' => 'nullable|date|after_or_equal:start_date',
             'note' => 'nullable|string'
         ]);
+
+        $data['monthly_payment'] = $data['monthly_payment'] ?? 0;
 
         $acc = Account::findOrFail($data['account_id']);
         $this->authorize('update', $acc);

@@ -14,7 +14,7 @@
         </form>
 
         @if($active)
-        <div class="grid grid-cols-3 gap-3 text-center">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-center">
             <div class="bg-white rounded-xl p-4 shadow">
                 <div class="text-xs text-gray-500">Saldo</div>
                 <div class="text-xl font-bold">Rp {{ number_format($stats['balance'],0,',','.') }}</div>
@@ -26,6 +26,14 @@
             <div class="bg-white rounded-xl p-4 shadow">
                 <div class="text-xs text-gray-500">Pengeluaran</div>
                 <div class="text-lg font-semibold text-red-600">Rp {{ number_format($stats['expense'],0,',','.') }}</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow">
+                <div class="text-xs text-gray-500">Total Tabungan</div>
+                <div class="text-lg font-semibold text-blue-600">Rp {{ number_format($stats['savings_total'],0,',','.') }}</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow">
+                <div class="text-xs text-gray-500">Sisa Hutang</div>
+                <div class="text-lg font-semibold text-amber-600">Rp {{ number_format($stats['debts_total'],0,',','.') }}</div>
             </div>
         </div>
 
@@ -54,11 +62,12 @@
 
     {{-- Bottom Nav (mobile) --}}
     <div class="fixed bottom-0 inset-x-0 bg-white border-t shadow-sm">
-        <div class="grid grid-cols-5 text-center text-xs">
+        <div class="grid grid-cols-6 text-center text-xs">
             <a href="{{ route('dashboard') }}" class="p-2 {{ request()->routeIs('dashboard') ? 'text-blue-600' : '' }}">Dashboard</a>
             <a href="{{ route('accounts.index') }}" class="p-2 {{ request()->routeIs('accounts.*') ? 'text-blue-600' : '' }}">Akun</a>
             <a href="{{ route('transactions.index') }}" class="p-2 {{ request()->routeIs('transactions.*') ? 'text-blue-600' : '' }}">Transaksi</a>
             <a href="{{ route('savings.index') }}" class="p-2 {{ request()->routeIs('savings.*') ? 'text-blue-600' : '' }}">Tabungan</a>
+            <a href="{{ route('bills.index') }}" class="p-2 {{ request()->routeIs('bills.*') ? 'text-blue-600' : '' }}">Tagihan</a>
             <a href="{{ route('debts.index') }}" class="p-2 {{ request()->routeIs('debts.*') ? 'text-blue-600' : '' }}">Hutang</a>
 
         </div>

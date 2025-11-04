@@ -13,6 +13,7 @@
         <input name="creditor_name" class="w-full border rounded p-2" placeholder="Kreditur (nama pihak)">
         <input name="principal_amount" class="w-full border rounded p-2 js-currency" placeholder="Pokok hutang" type="text" inputmode="numeric" data-decimals="0">
         <input name="interest_rate" class="w-full border rounded p-2" placeholder="Bunga % (opsional)">
+        <input name="monthly_payment" class="w-full border rounded p-2 js-currency" placeholder="Angsuran bulanan (opsional)" type="text" inputmode="numeric" data-decimals="0">
         <input name="start_date" type="date" class="w-full border rounded p-2">
         <input name="due_date" type="date" class="w-full border rounded p-2">
         <textarea name="note" class="w-full border rounded p-2" placeholder="Catatan (opsional)"></textarea>

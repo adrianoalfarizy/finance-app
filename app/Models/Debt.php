@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Debt extends Model
 {
@@ -11,6 +12,7 @@ class Debt extends Model
         'creditor_name',
         'principal_amount',
         'interest_rate',
+        'monthly_payment',
         'start_date',
         'due_date',
         'note',
@@ -21,6 +23,7 @@ class Debt extends Model
     protected $casts = [
         'principal_amount' => 'float',
         'interest_rate'    => 'float',
+        'monthly_payment'  => 'float',
     ];
 
     // Opsional: supaya muncul saat toArray()/JSON (tidak wajib untuk Blade)
@@ -30,6 +33,11 @@ class Debt extends Model
         'paid_amount',
         'remaining_due',
     ];
+
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
 
     public function payments()
     {

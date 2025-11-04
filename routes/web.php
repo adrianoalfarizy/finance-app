@@ -7,6 +7,7 @@ use App\Http\Controllers\{
     DashboardController,
     DebtController,
     DebtPaymentController,
+    BillingController,
     ProfileController,
     SavingController,
     SavingEntryController,
@@ -40,6 +41,10 @@ Route::middleware('auth')->group(function () {
     // Hutang
     Route::resource('debts', DebtController::class)->only(['index', 'create', 'store']);
     Route::post('debts/{debt}/payments', [DebtPaymentController::class, 'store'])->name('debts.payments.store');
+
+    // Tagihan
+    Route::get('bills', [BillingController::class, 'index'])->name('bills.index');
+    Route::post('bills', [BillingController::class, 'store'])->name('bills.store');
 });
 
 require __DIR__ . '/auth.php';

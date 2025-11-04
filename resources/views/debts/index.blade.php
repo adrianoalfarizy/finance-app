@@ -42,6 +42,9 @@
                         <div>Bunga ({{ rtrim(rtrim(number_format($d->interest_rate ?? 0, 2, ',', '.'), '0'), ',') }}%):
                             Rp {{ number_format($d->interest_amount, 0, ',', '.') }}</div>
                         <div>Total: <span class="font-semibold">Rp {{ number_format($d->total_due, 0, ',', '.') }}</span></div>
+                        @if($d->monthly_payment > 0)
+                            <div>Angsuran bulanan: Rp {{ number_format($d->monthly_payment, 0, ',', '.') }}</div>
+                        @endif
                         <div>Terbayar: Rp {{ number_format($d->paid_amount, 0, ',', '.') }}</div>
                         <div>Sisa: <span class="font-semibold">Rp {{ number_format($d->remaining_due, 0, ',', '.') }}</span>
                         </div>
